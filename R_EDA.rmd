@@ -1,0 +1,161 @@
+---
+title: "Практическое задание 3"
+author: "Орлан Ондар"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+### Задание 1
+
+
+#### 1. 
+
+```{r}
+housing <- read.csv('housing.csv', sep='\t')
+###View(housing)
+```
+
+#### 2.
+
+```{r, echo = FALSE}
+head(housing)
+```
+
+
+
+```{r, echo = FALSE}
+tail(housing)
+```
+
+
+
+```{r, echo = FALSE}
+str(housing)
+```
+
+#### 3. 
+
+```{r, echo = FALSE}
+summary(housing)
+```
+
+
+В колонках CRIM, ZN,RAD, LSTAT имеются ярко выраженные выбросы максимальных значений.
+В колонке CHAS имеются аномальные значения.
+Колонка LON имеет отрицательные значения.
+В колонках CRIM, ZN, INDUS, RAD, LSTAT наблюдается высокая дисперсия.
+
+#### 4.
+
+```{r}
+housing$MEDV_N <- housing$MEDV * 1000
+```
+
+#### 5.
+
+```{r}
+small <- housing[(housing$MEDV > 400) & (housing$MEDV < 500), ]
+print(nrow(small))
+```
+
+#### 6.
+
+```{r}
+library(tidyverse)
+housing <- housing %>% mutate(MEDV_LOG = log(MEDV))
+```
+
+#### 7.
+
+```{r}
+housing %>% filter(LSTAT >= 30) %>% select(TOWN) %>% head
+```
+
+#### 8. 
+
+```{r}
+hist(housing$LSTAT,
+     main = 'LSTAT spreading',
+     ylab = 'Count',
+     xlab = 'LSTAT',
+     col = 'skyblue')
+```
+
+Распределение имеет нормальное распрделение, однако скошено вправо.
+Преобладают значения от 5 до 10.
+
+```{r}
+png('LSTAT hist.png')
+hist(housing$LSTAT,
+     main = 'LSTAT spreading',
+     ylab = 'Count',
+     xlab = 'LSTAT',
+     col = 'skyblue')
+dev.off
+```
+
+#### 9.
+
+```{r}
+ggplot(data = housing, aes(x = LSTAT)) + 
+  geom_histogram(fill = 'skyblue', color = 'navy') + 
+  labs(title = 'LSTAT spreading', x = 'LSTAT', y = 'Count')
+ggsave('LSTAT spreading 2.png')
+```
+
+
+### Задание 2
+
+
+#### 1.
+
+
+```{r}
+flats = read.csv('flats.csv')
+###View(flats)
+```
+
+#### 2.
+
+```{r}
+flats %>% group_by(brick) %>% tally
+```
+
+Домов из кирпича меньше.
+
+#### 3.
+
+```{r}
+flats %>% group_by(brick) %>% summarise(mean_price = mean(price))
+```
+
+Квартиры из кирпича в среднем дороже.
+
+#### 4. 
+
+```{r}
+ggplot(data = flats,
+       aes(x = price)) + 
+  geom_histogram(fill = 'indianred1', color = 'indianred3') +
+  facet_grid(~walk)
+```
+
+Распределение цен на жилье, которое не в шаговой доступности от метро менее скошено вправо.
+
+#### 5.
+
+```{r}
+ggplot(data = flats, 
+       aes(x = totsp,
+           y = price,
+           color = walk,
+           size = kitsp)) + 
+  geom_point(alpha = 0.6) + 
+  labs(title = 'Price vs Square',
+       x = 'square',
+       y = 'price')
+```
+
+
+

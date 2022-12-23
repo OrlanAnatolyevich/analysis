@@ -1,0 +1,89 @@
+---
+title: "Практическое задание 2"
+output:
+  word_document: default
+  html_document:
+    df_print: paged
+---
+### Задание 1
+
+```{r}
+belki <- 24
+strelki <- 28
+```
+```{r}
+if (belki > strelki){
+  print('Победила команда БЕЛКИ')
+} else {
+  if (belki == strelki){
+    print('Победила дружба!')
+  } else {
+    print('Победила команда СТРЕЛКИ')
+  }
+}
+```
+
+
+### Задание 2
+
+```{r}
+temp <- c(-8, -5, 0, 2, -6, -9, -8, -12, -11, -7)
+```
+```{r}
+for (t in temp){
+  if (t > -3.7){
+    cat(t, 'Температура выше нормы', fill = TRUE)
+  } else {
+    if (t < -9.8){
+      cat(t, 'Температура ниже нормы', fill = TRUE)
+    } else {
+      cat(t, 'Температура в норме', fill = TRUE)
+    }
+  }
+}
+```
+
+### Задание 3
+
+```{r}
+progress <- function(n, m){
+  percent <- n * 100 / m
+  percent <- round(percent, 2)
+}
+```
+
+### Задание 4
+
+```{r}
+assessment <- function(vect){
+  new.vect <- c()
+  for (v in vect){
+    if (v > 0){
+      new.vect <- c(new.vect, 1)
+    } else {
+      new.vect <- c(new.vect, 0)
+    }
+  }
+  return(new.vect)
+}
+```
+```{r}
+vect1 <- c(-100, 150, 3500, 720, 0, -350)
+assessment(vect1)
+```
+
+### Задание 5
+
+```{r}
+assessment1 <- function(vect){
+  new.vect <- c()
+  for (v in vect){
+    new.vect <- c(new.vect, ifelse (v > 0, 1, 0))
+  }
+  return(new.vect)
+}
+```
+```{r}
+print(assessment1(vect1))
+```
+

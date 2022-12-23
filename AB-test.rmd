@@ -1,0 +1,116 @@
+---
+title: "Практическое задание "
+author: "Орлан Ондар"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+### Задача 1  
+
+
+```{r}
+z <- 1.96
+p <- 0.5
+err <- 0.03
+selection_volume = z ** 2 * p * (1 - p) / err ** 2
+print(round(selection_volume))
+```
+
+### Задача 2  
+
+
+```{r}
+z <- 1.96
+p <- 0.67
+err <- 0.03
+selection_volume = z ** 2 * p * (1 - p) / err ** 2
+print(round(selection_volume))
+```
+  
+  
+Неоходимый объем выборки при ожидании 0.67 меньше, чем при ожидании 0.5. 
+Чем дальше ожидаемая доля от 0.5, тем меньше необходимый объем выборки.
+
+
+### Задача 3  
+
+#### 1.  
+
+
+```{r}
+coffee <- read.csv('experiment.csv')
+library(DescTools)
+
+```
+
+  
+  
+#### 2.
+
+
+```{r}
+test_int <- BinomCI(sum(coffee$test), max(coffee$X), conf.level = 0.9)
+print(test_int)
+```
+
+
+C 90% уровнем доверия можно сказать, что доля людей, которые захотели купить кофе с старой упаковке, находится на интервале от 0.55 до 0.6  
+
+  
+  
+#### 3.
+  
+  
+```{r}
+control_int <- BinomCI(sum(coffee$control), max(coffee$X), conf.level = 0.9)
+print(control_int)
+```
+
+  
+  
+C 90% уровнем доверия можно сказать, что доля людей, которые захотели купить кофе в новой упаковке, находится на интервале от 0.43 до 0.49
+
+
+  
+  
+  
+#### 4.
+
+
+На основании полученных сведений можно сделать статистически значимый вывод о том, что новый дизайн упаковки с 90% уровнем доверия вызывает желание купить кофе у от 43% до 49% опрошенных. В сравнении со старым дизайном упаковки -- такое желание имеется у от от 55% до 60% опрошенных. 
+
+Следовательно, новый дизайн упаковки не привлекате больше потенциальных покупателей.
+
+
+#### 5.  
+
+
+```{python}
+import numpy as np
+import pandas as pd
+import scipy.stats as st
+
+coff = pd.read_csv('experiment.csv')
+
+common_num = coff.shape[0]
+success_answer = sum(coff['test'])
+estim = success_answer / common_num
+se = np.sqrt(estim * (1 - estim) / common_num)
+
+py_test_int = st.norm.interval(0.9, estim, se)
+print('Доверительный интервал тестовой выборки', py_test_int)
+```
+
+```{python}
+common_num = coff.shape[0]
+success_answer = sum(coff['control'])
+estim = success_answer / common_num
+se = np.sqrt(estim * (1 - estim) / common_num)
+
+py_control_int = st.norm.interval(0.9, estim, se)
+print('Доверительный интервал контрольной выборки', py_control_int)
+```
+
+Результаты не изменились.
+

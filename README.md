@@ -1,2 +1,2 @@
 # analysis
-My mini data analysis projects
+My mini practics

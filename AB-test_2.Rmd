@@ -1,0 +1,144 @@
+---
+title: "Практическое задание"
+author: "Орлан Ондар"
+output:
+  word_document: default
+  html_notebook: default
+---
+
+### Часть 1  
+
+#### 1.
+
+```{r}
+parf <- read.csv('parfume.csv')
+```
+
+#### 2.
+
+```{r}
+parf <- parf[5:6]
+parf <- parf[parf$vote != 2, ]
+```
+
+
+
+#### 3.
+
+
+
+```{r}
+barplot(table(parf[parf$group == 'test', ]), main = 'vote counts of test group', col = 'darkseagreen2', xlab = 'vote (0/1)', ylab = 'count')
+```
+
+
+
+```{r}
+barplot(table(parf[parf$group == 'control', ]), main = 'vote counts of control group', col = 'darkseagreen2', xlab = 'vote (0/1)', ylab = 'count')
+```
+
+
+
+
+#### 4.
+
+
+```{r}
+control <- parf[parf$group == 'control', 'vote']
+
+test <- parf[parf$group == 'test', 'vote']
+```
+
+
+#### 5.
+
+H0: p_old = p_new
+
+H1: p_old < p_new
+
+
+#### 6.
+
+```{r}
+set.seed(123)
+p_control <- mean(control)
+p_test <- mean(test)
+p_diff = p_control - p_test
+
+N <- 1000
+differences <- rep(NA, N)
+for (i in 1:N){
+  c <- sample(control, replace = TRUE)
+  t <- sample(test, replace = TRUE)
+  p <- mean(c) - mean(t)
+  differences[i] <- p
+}
+###hist(differences)
+
+differences_cent <- differences - mean(differences)
+p_val = sum(differences_cent >= p_diff) / N
+print(p_val)
+```
+
+
+Статистический вывод: на имеющихся данных, на уровне значимости 5% (уровне доверия 95%) есть основания не опровергать нулевую гипотезу.
+
+Содержательный вывод: демонстрация черно-белого рекламного ролика не увеличило количество желающих приобрести товар.
+
+
+### Часть 2
+
+#### 1.
+
+
+```{python}
+import pandas as pd
+import numpy as np
+
+parf = pd.read_csv('parfume.csv')
+```
+
+#### 2.
+
+
+```{python}
+parf = parf[parf['vote'] != 2][['group', 'vote']]
+```
+
+#### 3.
+
+```{python}
+my_test = parf[parf['group'] == 'test']
+my_control = parf[parf['group'] == 'control']
+```
+
+#### 4.
+
+
+```{python}
+p_t = sum(my_test['vote'])
+p_c = sum(my_control['vote'])
+total_t = my_test.size
+total_c = my_control.size
+my_count = np.array([p_t, p_c])
+my_nobs = np.array([total_t, total_c])
+```
+
+
+#### 5.
+
+
+```{python}
+from statsmodels.stats.proportion import proportions_ztest as ztest
+
+result = ztest(my_count, my_nobs, alternative = 'larger')
+print('p-value: ', result[1])
+```
+
+H0: p_test = p_control
+
+H1: p_test > p_control
+
+Статистический вывод: на имеющихся данных, с уровнем значимости 5% (уровнем доверия 95%), есть достаточные основания отвергнуть H0 в пользу H1.
+
+Содержательный вывод: демонстрация цветного рекламного ролика дает больше конверсии, чем демонстрация черно-белого рекламного ролика.
